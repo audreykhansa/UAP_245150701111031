@@ -1,5 +1,7 @@
 package interfaces;
 
 public interface ShippingCostCalculator {
-    int biayaKirim(double massaKg);
+    int PRICE_PER_KG = 2000;
+
+    double calculateCost();
 }

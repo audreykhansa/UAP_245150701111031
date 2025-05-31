@@ -1,6 +1,6 @@
 package interfaces;
 
 public interface ThreeDimensional {
-    double hitungVolume();
-    double hitungLuasPermukaan();
+    double getSurfaceArea();
+    double getVolume();
 }

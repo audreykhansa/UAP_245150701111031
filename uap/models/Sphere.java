@@ -1,37 +1,62 @@
 package models;
 
 import bases.Shape;
+import interfaces.ThreeDimensional;
+import interfaces.PiRequired;
+import interfaces.MassCalculable;
+import interfaces.MassConverter;
+import interfaces.ShippingCostCalculator;
 
-public class Sphere extends Shape {
-    private double r;
+public class Sphere extends Shape implements ThreeDimensional, PiRequired, MassCalculable, MassConverter, ShippingCostCalculator {
+    private double radius; 
 
-    public Sphere(double r) {
-        this.r = r;
+    public Sphere() {
+        super();
     }
 
-    public double hitungVolume() {
-        return (4.0 / 3.0) * PI * r * r * r;
+    public Sphere(double radius) {
+        super();
+        this.radius = radius;
     }
 
-    public double hitungLuasPermukaan() {
-        return 4 * PI * r * r;
+    public double dapatkanJejari() { 
+        return radius;
     }
 
-    public double hitungMassa() {
-        return hitungVolume() * MASSA_JENIS;
+    public void aturJejari(double jejariBaru) { 
+        this.radius = jejariBaru;
     }
 
+    @Override
+    public double getVolume() {
+        return (4.0 / 3.0) * PI * this.radius * this.radius * this.radius;
+    }
+
+    @Override
+    public double getSurfaceArea() {
+        return 4 * PI * this.radius * this.radius;
+    }
+
+    @Override
+    public double getMass() {
+        return DENSITY * getSurfaceArea() * THICKNESS;
+    }
+
+    @Override
     public void printInfo() {
-        double volume = hitungVolume();
-        double luas = hitungLuasPermukaan();
-        double massa = hitungMassa();
-        double massaKg = konversiKg(massa);
-        int biaya = biayaKirim(massaKg);
+        System.out.printf("Volume\t\t\t: %.2f cm^3\n", getVolume());
+        System.out.printf("Luas permukaan\t\t: %.2f cm^2\n", getSurfaceArea());
+        System.out.printf("Massa\t\t\t: %.2f gr\n", getMass());
+    }
 
-        System.out.printf("Volume          : %.2f cm^3\n", volume);
-        System.out.printf("Luas permukaan  : %.2f cm^2\n", luas);
-        System.out.printf("Massa           : %.2f gr\n", massa);
-        System.out.printf("Massa dalam kg  : %.2f kg\n", massaKg);
-        System.out.printf("Biaya kirim     : Rp%d\n", biaya);
+    @Override
+    public double gramToKilogram() {
+        return getMass() / DENOMINATOR;
+    }
+
+    @Override
+    public double calculateCost() {
+        double massInKg = gramToKilogram();
+        return Math.ceil(massInKg) * PRICE_PER_KG;
     }
 }
